@@ -37,11 +37,16 @@ const Item = styled.li`
     }
 `;
 
+/* 
+принимает props:
+.part - массив объектов товарами опред. категории из БД - из  Menu
+.setOpenItem - функция изменения useState() из App через Menu
+*/
 export const ListItem = (props) => {
     return (
         <List>
             {props.part.map(item => (
-                <Item key={item.id} img={item.img}>
+                <Item key={item.id} img={item.img} onClick = {() => props.setOpenItem(item)}>
                     <p>{item.name}</p>
                     <p>{item.price.toLocaleString('ru-RU', {style: 'currency', currency: 'RUB' })}</p>
                 </Item>

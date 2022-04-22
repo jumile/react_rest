@@ -13,17 +13,20 @@ const SectionMenu = styled.section`
     padding: 30px;
 `;
 
-export const Menu = () => {
+/* принимает props:
+.setOpenItem - функция изменения useState() - и передает дальше, дочернему
+*/
+export const Menu = (props) => {
     return (
         <MenuStyled>
             <Banner />
             <SectionMenu>
                 <h2>Бургеры</h2>
-                <ListItem part={dbMenu.burger} />
+                <ListItem part={dbMenu.burger} setOpenItem = {props.setOpenItem} />
             </SectionMenu>
             <SectionMenu>
                 <h2>Закуски / Напитки</h2>
-                <ListItem part={dbMenu.other} />
+                <ListItem part={dbMenu.other} setOpenItem = {props.setOpenItem} />
             </SectionMenu>
         </MenuStyled>
     )

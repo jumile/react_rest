@@ -1,8 +1,7 @@
-import React from 'react';
 import styled from 'styled-components';
 import BannerImg from '../images/banner.png';
 
-const BannerStyled = styled.div`
+export const Banner = styled.div`
     background-image: url(${BannerImg});
     background-repeat: no-repeat;
     background-size: cover;
@@ -10,8 +9,3 @@ const BannerStyled = styled.div`
     width: 100vw;
 `;
 
-export const Banner = () => {
-    return (
-        <BannerStyled />
-    );
-}
