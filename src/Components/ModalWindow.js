@@ -28,11 +28,14 @@ const Banner = styled.div`
     background-image: url(${(props) => props.img});
     background-size: cover;
     background-position: center;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
 `;
 
 const ModalContent = styled.div`
-   
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: calc(100% - 200px);
 `;
 
 const H3 = styled.h3`
@@ -40,7 +43,7 @@ const H3 = styled.h3`
     font-size: 30px;
     margin-top: 20px;
     margin-left: 37px;
-    margin-right: 53px;
+    margin-right: 37px;
     display: flex;
     justify-content: space-between;
 `;
@@ -69,9 +72,8 @@ export const ModalWindow = (props) => {
                         <span>{props.openItem.name}</span>
                         <span>{props.openItem.price.toLocaleString('ru-RU', {style: 'currency', currency: 'RUB' })}</span>
                     </H3>
-                    <ButtonAdd />
-                </ModalContent>
-                
+                    <ButtonAdd>Добавить</ButtonAdd>
+                </ModalContent>                
             </Modal>
         </Overlay >
     );
