@@ -1,22 +1,25 @@
 import React from 'react';
-import { NavBar } from './Components/NavBar';
-import { Menu } from './Components/Menu';
-import { GlobalStyle } from './Components/GlobalStyle';
-import { ModalWindow} from './Components/ModalWindow';
-import { Order } from './Components/Order';
+import { NavBar } from './Components/NavBar/NavBar';
+import { Menu } from './Components/Menu/Menu';
+import { GlobalStyle } from './Components/Style/GlobalStyle';
+import { ModalWindow} from './Components/Modal/ModalWindow';
+import { Order } from './Components/Order/Order';
+import { useOpenItem } from './Components/Hooks/useOpenItem';
+import { useOrders } from './Components/Hooks/useOrders';
 
 function App() {
 
-const [openItem, setOpenItem] = React.useState(null);
+const openItem = useOpenItem();
+const orders = useOrders();
 
 
   return (
     <>
       <GlobalStyle />
       <NavBar />
-      <Order />
-      <Menu setOpenItem = {setOpenItem} />
-      <ModalWindow openItem = {openItem} setOpenItem = {setOpenItem} />
+      <Order {...orders} />
+      <Menu {...openItem} />
+      { openItem.openItem && <ModalWindow {...openItem} {...orders} />} {/*проверка, что выбран товар (в хуке openItem св-во openItem не undefined)*/}
     </>
     
   );
