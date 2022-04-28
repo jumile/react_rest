@@ -41,8 +41,9 @@ const ItemToppings =  styled.div`
 /*
 props:
 .order - отдел. товар из заказа из Order.js, объект
+.deleteItem - удаление товара из заказа, из Order.js, функция
  */
-export const OrderListItem = (props) => { 
+export const OrderListItem = (props) => {    
     /* мой вариант */     
     const toppingList = [];
      props.order.topping.forEach((item) => {      
@@ -54,13 +55,13 @@ export const OrderListItem = (props) => {
         .map((item) => item.name)
         .join(', ');
     */
-            
+     
     return (
         <OrderItemStyled>
-            <ItemName>{props.order.name}</ItemName>
+            <ItemName>{props.order.name} {props.order.choice} </ItemName>
             <span>{props.order.count}</span>
             <ItemPrice>{localCurrency(totalPriceCount(props.order))}</ItemPrice>
-            <TrashBtn />
+            <TrashBtn onClick={() => props.deleteItem(props.order) } />
             {toppingOrder && <ItemToppings>Добавки: {toppingOrder}</ItemToppings> }
         </OrderItemStyled>
     );

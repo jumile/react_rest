@@ -6,6 +6,8 @@ import { useCount } from '../Hooks/useCount';
 import { localCurrency, totalPriceCount } from '../Functions/secondaryFunctions';
 import { Toppings } from './Toppings';
 import { useTopping } from '../Hooks/useTopping';
+import { Choices } from './Choices';
+import { useChoices } from '../Hooks/useChoices';
 
 const Overlay = styled.div`
     display: flex;
@@ -69,6 +71,8 @@ export const ModalWindow = (props) => {
 
     const counter = useCount(); // получаем объект {count, setCount, onChange}
     const toppings = useTopping(props.openItem); // получаем инфо о добавках для конкр. товара (props.openItem) 
+    const choices = useChoices(props.openItem); // получаем инфо о выборе варианта товара
+    
     function closeModal(e) {
         if(e.target.id === 'overlay') {
             props.setOpenItem(null);
@@ -79,14 +83,14 @@ export const ModalWindow = (props) => {
     const order = {
         ...props.openItem, // полная инфо о товаре
         count: counter.count, // кол-во товара
-        topping: toppings.toppings // добавки
+        topping: toppings.toppings, // добавки
+        choice: choices.choice, // вариант товара
     }; 
     //добавление товара в заказ
     function addToOrder() {
         props.setOrders([...props.orders, order]); // добавляем новый товар к уже имеющемуся в заказе
         props.setOpenItem(null); // чтобы модал. окно закрылось
     }
-
     return (
         <Overlay id="overlay" onClick = {closeModal} >            
             <Modal>
@@ -98,12 +102,18 @@ export const ModalWindow = (props) => {
                     </H3>
                     <CountItem counter={counter} />
                     { props.openItem.toppings && <Toppings {...toppings} /> }
+                    { props.openItem.choices && <Choices {...choices} openItem={props.openItem} /> }
                     <TotalPriceItem>
                         <span>Сумма:</span>
                         <span>{localCurrency(totalPriceCount(order))}</span>
                     </TotalPriceItem>
                     
-                    <ButtonAdd onClick = {addToOrder}>Добавить</ButtonAdd>
+                    <ButtonAdd 
+                        onClick = {addToOrder} 
+                        disabled = {order.choices && !order.choice}  /* order.choices - массив со 
+                        всеми вариантами, order.choice - то, что добавлено в заказ. 
+                        Не до конца поняла, откуда берется order.choices */
+                    >Добавить</ButtonAdd>
                 </ModalContent> 
             </Modal>
         </Overlay >

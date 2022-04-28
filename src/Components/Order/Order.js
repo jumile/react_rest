@@ -69,6 +69,20 @@ export const Order = (props) => {
     const totalKol = props.orders.reduce((result, item) => {
         return item.count + result
     }, 0);
+    //удаление товара из заказа
+    const deleteItem = (orderItem) => { 
+       
+        /* длинный вариант
+        const n =[]
+        for (let obj of props.orders) {
+            if(obj !== orderItem) {
+                n.push(obj)
+            }
+        } */
+
+        const n = props.orders.filter((item) =>  item !== orderItem )
+        props.setOrders(n)         
+    }
 
     return (        
         <OrderStyled>
@@ -78,7 +92,7 @@ export const Order = (props) => {
             <OrderContent>
                { props.orders.length ?
                 <OrderList>
-                    {props.orders.map( (order) => { return <OrderListItem order={order} /> } ) } 
+                    {props.orders.map( (order) => { return <OrderListItem order={order} deleteItem={deleteItem} /> } ) } 
                             {/* в строке <OrderListItem order={order}>: order= - это произвольно придуманный параметр компонента <OrderListItem>
                             ={order}: order - это обрабатываемый в данный момент элемент массива, (order)
                             более короткая запись: props.orders.map( order => <OrderListItem order={order} />  )*/}

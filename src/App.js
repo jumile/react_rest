@@ -12,7 +12,6 @@ function App() {
 const openItem = useOpenItem();
 const orders = useOrders();
 
-
   return (
     <>
       <GlobalStyle />
