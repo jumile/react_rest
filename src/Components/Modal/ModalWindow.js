@@ -4,6 +4,8 @@ import { ButtonAdd } from '../Button/ButtonAdd';
 import { CountItem } from './CountItem';
 import { useCount } from '../Hooks/useCount';
 import { localCurrency, totalPriceCount } from '../Functions/secondaryFunctions';
+import { Toppings } from './Toppings';
+import { useTopping } from '../Hooks/useTopping';
 
 const Overlay = styled.div`
     display: flex;
@@ -21,7 +23,7 @@ const Overlay = styled.div`
 const Modal = styled.div`    
     background: #fff;
     width: 500px;
-    height: 500px;
+    height: auto;
     margin-top: 100px;    
 `;
 
@@ -31,7 +33,6 @@ const Banner = styled.div`
     background-image: url(${(props) => props.img});
     background-size: cover;
     background-position: center;
-    /*margin-bottom: 20px;*/
 `;
 
 const ModalContent = styled.div`
@@ -39,14 +40,14 @@ const ModalContent = styled.div`
     flex-direction: column;
     justify-content: space-between;
     height: calc(100% - 200px);
+    padding-left: 37px;
+    padding-right: 37px;
 `;
 
 const H3 = styled.h3`
     font-weight: 400;
     font-size: 30px;
     margin-top: 20px;
-    margin-left: 37px;
-    margin-right: 37px;
     display: flex;
     justify-content: space-between;
 `;
@@ -54,8 +55,6 @@ const H3 = styled.h3`
 const TotalPriceItem = styled.div`
     display: flex;
     justify-content: space-between;
-    margin-left: 37px;
-    margin-right: 37px;
 `;
 
 
@@ -69,19 +68,19 @@ const TotalPriceItem = styled.div`
 export const ModalWindow = (props) => {
 
     const counter = useCount(); // получаем объект {count, setCount, onChange}
-
+    const toppings = useTopping(props.openItem); // получаем инфо о добавках для конкр. товара (props.openItem) 
     function closeModal(e) {
         if(e.target.id === 'overlay') {
             props.setOpenItem(null);
         }
     }
-
-    // новый товар в заказе
+   
+    // новый товар в заказе 
     const order = {
         ...props.openItem, // полная инфо о товаре
-        count: counter.count
+        count: counter.count, // кол-во товара
+        topping: toppings.toppings // добавки
     }; 
-    
     //добавление товара в заказ
     function addToOrder() {
         props.setOrders([...props.orders, order]); // добавляем новый товар к уже имеющемуся в заказе
@@ -98,10 +97,12 @@ export const ModalWindow = (props) => {
                         <span>{localCurrency(props.openItem.price)}</span>
                     </H3>
                     <CountItem counter={counter} />
+                    { props.openItem.toppings && <Toppings {...toppings} /> }
                     <TotalPriceItem>
                         <span>Сумма:</span>
                         <span>{localCurrency(totalPriceCount(order))}</span>
                     </TotalPriceItem>
+                    
                     <ButtonAdd onClick = {addToOrder}>Добавить</ButtonAdd>
                 </ModalContent> 
             </Modal>

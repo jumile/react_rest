@@ -11,7 +11,7 @@ const OrderStyled = styled.section`
     display: flex;
     flex-direction: column;
     background: #fff;
-    min-width: 380px;
+    max-width: 380px;
     height: calc(100% - 80px);
     box-shadow: 3px 4px 5px rgba(0,0,0, .25);
     padding: 20px;
@@ -53,15 +53,21 @@ const EmptyList = styled.p`
     text-align: left;
     margin-top: 40px;
 `;
+
+
 /*
 props: 
 .orders - из хука useOrders через App, инфо о конкр. товаре
 .setOrders - из хука useOrders через App, функция обновления конкр. заказа
 */
-export const Order = (props) => {
-    
-    const total = props.orders.reduce((result, item) => {
+export const Order = (props) => {   
+    //подсчет итоговой цены: result -итоговое значение,  item - каждый заказа из props.orders
+    const totalPr = props.orders.reduce((result, item) => {
         return totalPriceCount(item) + result
+    }, 0);
+    // подсчет итогового кол-ва: result -итоговое значение,  item - каждый заказа из props.orders
+    const totalKol = props.orders.reduce((result, item) => {
+        return item.count + result
     }, 0);
 
     return (        
@@ -81,8 +87,8 @@ export const Order = (props) => {
             </OrderContent>    
                 <Total>
                     <span>ИТОГО</span>
-                    <span>5</span>
-                    <TotalPrice>{localCurrency(total)}</TotalPrice>
+                    <span>{totalKol}</span>
+                    <TotalPrice>{localCurrency(totalPr)}</TotalPrice>
                 </Total>
                 <ButtonAdd>Оформить</ButtonAdd>            
         </OrderStyled>
