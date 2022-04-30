@@ -59,8 +59,6 @@ const TotalPriceItem = styled.div`
     justify-content: space-between;
 `;
 
-
-
 /* props:
 .openItem - из хука useOpenItem() через App, содержит объект с конкр. товаром
 .setOpenItem - функция обновления useState() из хука useOpenItem() через App
@@ -69,9 +67,10 @@ const TotalPriceItem = styled.div`
 */
 export const ModalWindow = (props) => {
 
-    const counter = useCount(); // получаем объект {count, setCount, onChange}
+    const counter = useCount(props.openItem.count); // получаем объект {count, setCount, onChange}
     const toppings = useTopping(props.openItem); // получаем инфо о добавках для конкр. товара (props.openItem) 
     const choices = useChoices(props.openItem); // получаем инфо о выборе варианта товара
+    const isEdit = props.openItem.index > -1;
     
     function closeModal(e) {
         if(e.target.id === 'overlay') {
@@ -91,7 +90,15 @@ export const ModalWindow = (props) => {
         props.setOrders([...props.orders, order]); // добавляем новый товар к уже имеющемуся в заказе
         props.setOpenItem(null); // чтобы модал. окно закрылось
     }
-    return (
+    //редактирование заказа
+    function editOrder() {
+        const newOrders = [...props.orders];
+        newOrders[props.openItem.index] = order; 
+        props.setOrders(newOrders);
+        props.setOpenItem(null); // чтобы модал. окно закрылось
+    } 
+
+     return (
         <Overlay id="overlay" onClick = {closeModal} >            
             <Modal>
                 <Banner img={props.openItem.img} />
@@ -109,11 +116,13 @@ export const ModalWindow = (props) => {
                     </TotalPriceItem>
                     
                     <ButtonAdd 
-                        onClick = {addToOrder} 
+                        onClick = {isEdit ? editOrder : addToOrder} 
                         disabled = {order.choices && !order.choice}  /* order.choices - массив со 
                         всеми вариантами, order.choice - то, что добавлено в заказ. 
                         Не до конца поняла, откуда берется order.choices */
-                    >Добавить</ButtonAdd>
+                    >
+                        {isEdit ? 'Редактировать' : 'Добавить'}  
+                    </ButtonAdd>
                 </ModalContent> 
             </Modal>
         </Overlay >

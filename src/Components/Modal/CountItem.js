@@ -26,8 +26,9 @@ const CountBut = styled.button`
 
 /*
 props:
-.counter - объект {count, setCount, onChange} из хука useCount
+.counter - объект {count, setCount, onChange} из modalWindow
 */
+
 export function CountItem(props) {
     const {count, setCount, onChange } = props.counter;
     return(

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import trashImg from '../../images/trash.svg';
 import { localCurrency, totalPriceCount } from '../Functions/secondaryFunctions';
@@ -19,6 +19,7 @@ const OrderItemStyled = styled.li`
     display: flex;
     flex-wrap: wrap; /* !!! */
     margin: 15px 0;
+    cursor: pointer;
 `;
 
 const ItemName = styled.span`
@@ -42,6 +43,8 @@ const ItemToppings =  styled.div`
 props:
 .order - отдел. товар из заказа из Order.js, объект
 .deleteItem - удаление товара из заказа, из Order.js, функция
+.index - индекс элемента, по к-ому щелкнули на корзине, в массиве всех заказов, из Order.js
+.setOpenItem - из хука useOpenItem, чтобы м.б. открывать модальное окно
  */
 export const OrderListItem = (props) => {    
     /* мой вариант */     
@@ -55,13 +58,21 @@ export const OrderListItem = (props) => {
         .map((item) => item.name)
         .join(', ');
     */
-     
+
+    const refDeleteButton = useRef(null);
+
+    /* к информации о товаре в заказе добавляем еще 1 св-во - index, это индекс товара 
+    в списке заказов. И все вместе передаем в setOpenItem() для открытия модал. окна 
+    для ред-ния заказа
+    */
+    props.order['index'] = props.index;
+
     return (
-        <OrderItemStyled>
-            <ItemName>{props.order.name} {props.order.choice} </ItemName>
+        <OrderItemStyled >
+            <ItemName onClick={(e) => e.target !== refDeleteButton.current && props.setOpenItem(props.order) }>{props.order.name} {props.order.choice} </ItemName>
             <span>{props.order.count}</span>
             <ItemPrice>{localCurrency(totalPriceCount(props.order))}</ItemPrice>
-            <TrashBtn onClick={() => props.deleteItem(props.order) } />
+            <TrashBtn ref={refDeleteButton} onClick={() => props.deleteItem(props.index) } />
             {toppingOrder && <ItemToppings>Добавки: {toppingOrder}</ItemToppings> }
         </OrderItemStyled>
     );

@@ -59,6 +59,8 @@ const EmptyList = styled.p`
 props: 
 .orders - из хука useOrders через App, инфо о конкр. товаре
 .setOrders - из хука useOrders через App, функция обновления конкр. заказа
+.openItem - из хука useOpenItem через App, чтобы м.б. открывать модальное окно
+.setOpenItem - - из хука useOpenItem через App,функция открытия модального окна
 */
 export const Order = (props) => {   
     //подсчет итоговой цены: result -итоговое значение,  item - каждый заказа из props.orders
@@ -70,18 +72,9 @@ export const Order = (props) => {
         return item.count + result
     }, 0);
     //удаление товара из заказа
-    const deleteItem = (orderItem) => { 
-       
-        /* длинный вариант
-        const n =[]
-        for (let obj of props.orders) {
-            if(obj !== orderItem) {
-                n.push(obj)
-            }
-        } */
-
-        const n = props.orders.filter((item) =>  item !== orderItem )
-        props.setOrders(n)         
+    const deleteItem = (index) => {               
+        const newOrder = props.orders.filter((item, i) =>  index !== i )
+        props.setOrders(newOrder);        
     }
 
     return (        
@@ -92,7 +85,15 @@ export const Order = (props) => {
             <OrderContent>
                { props.orders.length ?
                 <OrderList>
-                    {props.orders.map( (order) => { return <OrderListItem order={order} deleteItem={deleteItem} /> } ) } 
+                    {props.orders.map( (order, index) => { 
+                        return <OrderListItem 
+                            key ={index}
+                            order={order} 
+                            deleteItem={deleteItem} 
+                            index={index}
+                            setOpenItem = {props.setOpenItem}
+                        /> 
+                    } ) } 
                             {/* в строке <OrderListItem order={order}>: order= - это произвольно придуманный параметр компонента <OrderListItem>
                             ={order}: order - это обрабатываемый в данный момент элемент массива, (order)
                             более короткая запись: props.orders.map( order => <OrderListItem order={order} />  )*/}

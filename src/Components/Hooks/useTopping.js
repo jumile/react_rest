@@ -26,9 +26,15 @@ selectedItem - выбранный товар
 selectedItem.toppings - св-во с добавками из объекта выбранного товара, преобразованное в массив объектов
 */
 export function useTopping(selectedItem) {    
-    //если добавок нет
-    const readyTopping = selectedItem.toppings ? getTopping(selectedItem.toppings) : [];
-    const [toppings, setToppings ] = useState(readyTopping);
+    /* при редактировании заказа: 
+    если добавки уже выбраны, показываем их (в модал. окне ставятся флажки); 
+    если нет - флажки не ставятся;
+    если добавки у товара возможны, показываем их, если нет - пустой массив
+    */
+    const readyTopping = selectedItem.topping ? selectedItem.topping :
+                         selectedItem.toppings ? getTopping(selectedItem.toppings) : 
+                         [];
+     const [toppings, setToppings ] = useState(readyTopping);
     /* index - индекс добавки в массиве, по к-ой щелкнули; приходит из Toppings.js из свойств 
     флажка <ToppingCheckbox />
     перебираем массив с добавками из хука и если индекс (i) добавки (item) совпадает с индексом 

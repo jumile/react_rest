@@ -16,7 +16,7 @@ const orders = useOrders();
     <>
       <GlobalStyle />
       <NavBar />
-      <Order {...orders} />
+      <Order {...orders} {...openItem} />
       <Menu {...openItem} />
       { openItem.openItem && <ModalWindow {...openItem} {...orders} />} {/*проверка, что выбран товар (в хуке openItem св-во openItem не undefined)*/}
     </>
